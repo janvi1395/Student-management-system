@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Student Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🎓 EduManage
+        </div>
+
+        <nav>
+
+            <button
+                class="nav-btn active"
+                onclick="showSection('dashboard')"
+            >
+                📊 Dashboard
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="showSection('students')"
+            >
+                👨‍🎓 Students
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="showSection('addStudent')"
+            >
+                ➕ Add Student
+            </button>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div>
+
+                <h1>Student Management System</h1>
+
+                <p>
+                    Manage student information easily
+                </p>
+
+            </div>
+
+            <div class="profile">
+                👤 Admin
+            </div>
+
+        </header>
+
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboard" class="section active">
+
+            <h2>Dashboard</h2>
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        👨‍🎓
+                    </div>
+
+                    <div>
+
+                        <p>Total Students</p>
+
+                        <h2 id="totalStudents">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🎓
+                    </div>
+
+                    <div>
+
+                        <p>Courses</p>
+
+                        <h2 id="totalCourses">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📈
+                    </div>
+
+                    <div>
+
+                        <p>Average CGPA</p>
+
+                        <h2 id="averageCGPA">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📅
+                    </div>
+
+                    <div>
+
+                        <p>Avg Attendance</p>
+
+                        <h2 id="averageAttendance">
+                            0%
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT STUDENTS -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <h2>Recent Students</h2>
+
+                    <button
+                        class="small-btn"
+                        onclick="showSection('students')"
+                    >
+                        View All
+                    </button>
+
+                </div>
+
+                <div
+                    id="recentStudents"
+                    class="table-container"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STUDENTS SECTION -->
+
+        <section
+            id="students"
+            class="section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>Students</h2>
+
+                    <p>
+                        Manage all registered students
+                    </p>
+
+                </div>
+
+                <button
+                    class="primary-btn"
+                    onclick="showSection('addStudent')"
+                >
+                    + Add Student
+                </button>
+
+            </div>
+
+
+            <!-- SEARCH -->
+
+            <div class="search-container">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="🔍 Search by name, ID or course..."
+                    onkeyup="searchStudents()"
+                >
+
+                <select
+                    id="courseFilter"
+                    onchange="searchStudents()"
+                >
+
+                    <option value="all">
+                        All Courses
+                    </option>
+
+                    <option value="Computer Science">
+                        Computer Science
+                    </option>
+
+                    <option value="Information Technology">
+                        Information Technology
+                    </option>
+
+                    <option value="Electronics">
+                        Electronics
+                    </option>
+
+                    <option value="Mechanical">
+                        Mechanical
+                    </option>
+
+                    <option value="Civil">
+                        Civil
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- STUDENT TABLE -->
+
+            <div class="dashboard-card">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Student</th>
+
+                                <th>Email</th>
+
+                                <th>Course</th>
+
+                                <th>Year</th>
+
+                                <th>CGPA</th>
+
+                                <th>Attendance</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="studentTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ADD STUDENT -->
+
+        <section
+            id="addStudent"
+            class="section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2 id="formTitle">
+                        Add New Student
+                    </h2>
+
+                    <p>
+                        Enter student information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-card">
+
+                <form
+                    id="studentForm"
+                    onsubmit="saveStudent(event)"
+                >
+
+                    <input
+                        type="hidden"
+                        id="editId"
+                    >
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Student ID
+                            </label>
+
+                            <input
+                                type="text"
+                                id="studentId"
+                                placeholder="e.g. STU001"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="studentName"
+                                placeholder="Enter full name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="studentEmail"
+                                placeholder="student@example.com"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Phone
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="studentPhone"
+                                placeholder="Enter phone number"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Course
+                            </label>
+
+                            <select
+                                id="studentCourse"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Course
+                                </option>
+
+                                <option>
+                                    Computer Science
+                                </option>
+
+                                <option>
+                                    Information Technology
+                                </option>
+
+                                <option>
+                                    Electronics
+                                </option>
+
+                                <option>
+                                    Mechanical
+                                </option>
+
+                                <option>
+                                    Civil
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Year
+                            </label>
+
+                            <select
+                                id="studentYear"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Year
+                                </option>
+
+                                <option>
+                                    1st Year
+                                </option>
+
+                                <option>
+                                    2nd Year
+                                </option>
+
+                                <option>
+                                    3rd Year
+                                </option>
+
+                                <option>
+                                    4th Year
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                CGPA
+                            </label>
+
+                            <input
+                                type="number"
+                                id="studentCGPA"
+                                min="0"
+                                max="10"
+                                step="0.01"
+                                placeholder="0.00 - 10.00"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Attendance (%)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="studentAttendance"
+                                min="0"
+                                max="100"
+                                step="0.1"
+                                placeholder="0 - 100"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="reset"
+                            class="secondary-btn"
+                            onclick="resetForm()"
+                        >
+                            Clear
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                        >
+                            Save Student
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- EDIT MODAL -->
+
+<div
+    id="studentModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Edit Student</h2>
+
+            <button onclick="closeModal()">
+                ×
+            </button>
+
+        </div>
+
+        <form
+            id="editForm"
+            onsubmit="updateStudent(event)"
+        >
+
+            <input
+                type="hidden"
+                id="modalId"
+            >
+
+            <div class="form-group">
+
+                <label>
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="modalName"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="modalEmail"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Phone
+                </label>
+
+                <input
+                    type="tel"
+                    id="modalPhone"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    CGPA
+                </label>
+
+                <input
+                    type="number"
+                    id="modalCGPA"
+                    min="0"
+                    max="10"
+                    step="0.01"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Attendance
+                </label>
+
+                <input
+                    type="number"
+                    id="modalAttendance"
+                    min="0"
+                    max="100"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                Update Student
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
